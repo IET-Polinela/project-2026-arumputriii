@@ -1,96 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Smart Reporting</title>
 </head>
-<body style="
-    margin: 0;
-    min-height: 100vh;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(180deg, #87ceeb 0%, #a9def5 45%, #cfefff 100%);
-">
+<body>
+    <h1>Smart Reporting - Kota Bandar Lampung</h1>
 
-    <div style="text-align: center; padding: 70px 20px 35px;">
-        <h1 style="
-            color: white;
-            font-size: 42px;
-            margin-bottom: 12px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.15);
-        ">
-            👑 Selamat Datang Di Kota Bandar Lampung 👑
-        </h1>
+    <p><i>"Laporkan Masalahnya, Pantau Solusinya, Nikmati Perubahannya."</i></p>
 
-        <p style="
-            color: #f8fbff;
-            font-size: 20px;
-            margin: 0;
-        ">
-            Ini adalah halaman utama website
-        </p>
-    </div>
+    <p>
+        <a href="{% url 'add_report' %}">Tambah Laporan Baru</a>
+    </p>
 
-    <div style="
-        background: linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.18) 100%);
-        backdrop-filter: blur(2px);
-        width: 56%;
-        margin: 0 auto 60px auto;
-        padding: 28px 24px;
-        border-radius: 26px;
-        text-align: center;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-        border: 1px solid rgba(255,255,255,0.35);
-    ">
-        <h2 style="
-            color: #174d84;
-            font-size: 28px;
-            margin-bottom: 12px;
-        ">
-            Halo 👋
-        </h2>
+    <h2>Daftar Laporan</h2>
 
-        <p style="
-            font-size: 17px;
-            color: #2f4a5f;
-            line-height: 1.7;
-            margin-bottom: 10px;
-        ">
-            Website ini dibuat untuk praktikum Django Lab Session 2.
-        </p>
+    {% if reports %}
+        <ul>
+            {% for report in reports %}
+                <li>
+                    <strong>{{ report.title }}</strong><br>
+                    Kategori: {{ report.category }}<br>
+                    Lokasi: {{ report.location }}<br>
+                    Status: {{ report.status }}<br>
+                    Dilaporkan pada: {{ report.created_at }}<br>
 
-        <p style="
-            font-size: 17px;
-            color: #2f4a5f;
-            line-height: 1.7;
-        ">
-            Silakan kunjungi halaman About dan Contacts untuk melihat informasi lainnya.
-        </p>
-
-        <div style="margin-top: 24px;">
-            <a href="/about/" style="
-                text-decoration: none;
-                background-color: #ff8fb1;
-                color: white;
-                padding: 12px 24px;
-                border-radius: 12px;
-                margin: 8px;
-                display: inline-block;
-                font-weight: bold;
-            ">About</a>
-
-            <a href="/contacts/" style="
-                text-decoration: none;
-                background-color: #7ccf6b;
-                color: white;
-                padding: 12px 24px;
-                border-radius: 12px;
-                margin: 8px;
-                display: inline-block;
-                font-weight: bold;
-            ">Contacts</a>
-        </div>
-    </div>
-
+                    <a href="{% url 'report_detail' report.id %}">Detail</a> |
+                    <a href="{% url 'edit_report' report.id %}">Edit</a> |
+                    <a href="{% url 'delete_report' report.id %}">Delete</a>
+                </li>
+                <hr>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Belum ada laporan.</p>
+    {% endif %}
 </body>
 </html>
