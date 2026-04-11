@@ -1,19 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hapus Laporan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            line-height: 1.6;
+        }
+
+        .delete-box {
+            max-width: 600px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 6px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .message {
+            margin-bottom: 20px;
+        }
+
+        .actions button {
+            margin-right: 10px;
+        }
+
+        .cancel-link {
+            display: inline-block;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <h1>Hapus Laporan</h1>
 
-    <p>Apakah kamu yakin ingin menghapus laporan berikut?</p>
-    <p><strong>{{ report.title }}</strong></p>
+    <div class="delete-box">
+        <p class="message">
+            Yakin ingin menghapus laporan "<strong>{{ object.title }}</strong>"?
+        </p>
 
-    <form method="POST">
-        {% csrf_token %}
-        <button type="submit">Ya, Hapus</button>
-    </form>
+        <form method="post" class="actions">
+            {% csrf_token %}
+            <button type="submit">Ya, Hapus</button>
+        </form>
 
-    <p><a href="{% url 'home' %}">Batal</a></p>
+        <a href="{% url 'report_list' %}" class="cancel-link">Batal</a>
+    </div>
 </body>
 </html>

@@ -1,17 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tambah Laporan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            line-height: 1.6;
+        }
+
+        .form-box {
+            max-width: 600px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 6px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        form p {
+            margin-bottom: 15px;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        form input[type="text"],
+        form textarea,
+        form select {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        form textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            margin-top: 15px;
+        }
+
+        .form-actions button {
+            margin-right: 10px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <h1>Tambah Laporan</h1>
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Simpan</button>
-    </form>
+    <div class="form-box">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
 
-    <p><a href="{% url 'home' %}">Kembali ke daftar laporan</a></p>
+            <div class="form-actions">
+                <button type="submit">Simpan</button>
+            </div>
+        </form>
+
+        <a href="{% url 'report_list' %}" class="back-link">Kembali</a>
+    </div>
 </body>
 </html>
