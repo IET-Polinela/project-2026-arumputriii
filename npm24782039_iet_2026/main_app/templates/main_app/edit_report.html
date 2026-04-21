@@ -1,78 +1,71 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Laporan</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 30px;
-            line-height: 1.6;
-        }
+{% extends 'base.html' %}
 
-        .form-box {
-            max-width: 600px;
-            border: 1px solid #ccc;
-            padding: 20px;
-            border-radius: 6px;
-        }
+{% block title %}Edit Laporan{% endblock %}
 
-        h1 {
-            margin-bottom: 20px;
-        }
+{% block content %}
 
-        form p {
-            margin-bottom: 15px;
-        }
+<div class="app-card">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'report_list' %}">Reports</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Edit Laporan</li>
+        </ol>
+    </nav>
 
-        form label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: bold;
-        }
-
-        form input[type="text"],
-        form textarea,
-        form select {
-            width: 100%;
-            padding: 8px;
-            font-size: 14px;
-        }
-
-        form textarea {
-            min-height: 140px;
-            resize: vertical;
-        }
-
-        .form-actions {
-            margin-top: 15px;
-        }
-
-        .form-actions button {
-            margin-right: 10px;
-        }
-
-        .back-link {
-            display: inline-block;
-            margin-top: 10px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Edit Laporan</h1>
-
-    <div class="form-box">
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-
-            <div class="form-actions">
-                <button type="submit">Update</button>
-            </div>
-        </form>
-
-        <a href="{% url 'report_list' %}" class="back-link">Kembali</a>
+    <div class="d-flex align-items-center gap-2 mb-4">
+        <i class="bi bi-pencil-square text-warning fs-4"></i>
+        <h2 class="section-title mb-0">Edit Laporan</h2>
     </div>
-</body>
-</html>
+
+    <form method="post" id="reportForm">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="{{ form.title.id_for_label }}" class="form-label">Judul</label>
+            {{ form.title }}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.category.id_for_label }}" class="form-label">Kategori</label>
+            {{ form.category }}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.description.id_for_label }}" class="form-label">Deskripsi</label>
+            {{ form.description }}
+        </div>
+
+        <div class="mb-4">
+            <label for="{{ form.location.id_for_label }}" class="form-label">Lokasi</label>
+            {{ form.location }}
+        </div>
+
+        <div class="d-flex flex-wrap gap-2">
+            <button type="submit" class="btn btn-warning" id="submitBtn">
+                <i class="bi bi-save me-1"></i> Update
+            </button>
+            <a href="{% url 'report_list' %}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left me-1"></i> Kembali
+            </a>
+        </div>
+    </form>
+</div>
+
+<script>
+document.getElementById('reportForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const form = this;
+    const btn = document.getElementById('submitBtn');
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Loading...';
+
+    setTimeout(function() {
+        form.submit();
+    }, 700);
+});
+</script>
+
+{% endblock %}

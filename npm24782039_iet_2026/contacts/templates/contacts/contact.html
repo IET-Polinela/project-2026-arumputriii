@@ -1,103 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contacts</title>
-</head>
-<body style="
-    margin: 0;
-    min-height: 100vh;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(180deg, #dff7d6 0%, #ebfae5 45%, #f6fff2 100%);
-">
+{% extends 'base.html' %}
 
-    <div style="text-align: center; padding: 70px 20px 35px;">
-        <h1 style="
-            color: #4f8a3f;
-            font-size: 42px;
-            margin-bottom: 12px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.08);
-        ">
-            🌿 Halaman Contacts 🌿
-        </h1>
+{% block title %}Contact{% endblock %}
 
-        <p style="
-            color: #5f7f57;
-            font-size: 20px;
-            margin: 0;
-        ">
-            Ini adalah halaman contacts
-        </p>
-    </div>
+{% block content %}
 
-    <div style="
-        background: linear-gradient(180deg, rgba(255,255,255,0.40) 0%, rgba(255,255,255,0.22) 100%);
-        width: 56%;
-        margin: 0 auto 60px auto;
-        padding: 28px 24px;
-        border-radius: 26px;
-        text-align: center;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-        border: 1px solid rgba(255,255,255,0.35);
-    ">
-        <h2 style="
-            color: #5c9c4a;
-            font-size: 28px;
-            margin-bottom: 12px;
-        ">
-            Hubungi Kami ✨
-        </h2>
+<div class="app-card text-center">
+    <i class="bi bi-telephone-fill text-primary" style="font-size: 3rem;"></i>
 
-        <p style="
-            font-size: 17px;
-            color: #4f5f4a;
-            line-height: 1.7;
-            margin-bottom: 8px;
-        ">
-            Jika ingin mengetahui informasi lebih lanjut, silakan hubungi kami.
-        </p>
+    <h2 class="section-title mt-3 mb-3">Hubungi Kami</h2>
 
-        <p style="
-            font-size: 17px;
-            color: #4f5f4a;
-            margin-bottom: 6px;
-        ">
-            Email: humas@polinela.ac.id
-        </p>
+    <p class="text-muted mb-4">
+        Jika ada pertanyaan, masukan, atau membutuhkan informasi lebih lanjut mengenai
+        Smart Reporting, kamu dapat menghubungi kami melalui kontak berikut.
+    </p>
 
-        <p style="
-            font-size: 17px;
-            color: #4f5f4a;
-            margin-bottom: 10px;
-        ">
-            Telepon: 0721-703995
-        </p>
+    <div class="row g-3 justify-content-center">
+        <div class="col-md-4">
+            <div class="p-3 rounded border bg-light h-100">
+                <h5 class="fw-bold">Email</h5>
+                <p class="mb-0 text-muted">smartreporting@bandarlampung.go.id</p>
+            </div>
+        </div>
 
-        <div style="margin-top: 24px;">
-            <a href="/" style="
-                text-decoration: none;
-                background-color: #4da6ff;
-                color: white;
-                padding: 12px 24px;
-                border-radius: 12px;
-                margin: 8px;
-                display: inline-block;
-                font-weight: bold;
-            ">Home</a>
+        <div class="col-md-4">
+            <div class="p-3 rounded border bg-light h-100">
+                <h5 class="fw-bold">Telepon</h5>
+                <p class="mb-0 text-muted">(0721) 123456</p>
+            </div>
+        </div>
 
-            <a href="/about/" style="
-                text-decoration: none;
-                background-color: #ff8fb1;
-                color: white;
-                padding: 12px 24px;
-                border-radius: 12px;
-                margin: 8px;
-                display: inline-block;
-                font-weight: bold;
-            ">About</a>
+        <div class="col-md-4">
+            <div class="p-3 rounded border bg-light h-100">
+                <h5 class="fw-bold">Alamat</h5>
+                <p class="mb-0 text-muted">Bandar Lampung, Indonesia</p>
+            </div>
         </div>
     </div>
+</div>
 
-</body>
-</html>
+{% endblock %}

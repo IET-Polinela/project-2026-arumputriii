@@ -1,87 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
-</head>
-<body style="
-    margin: 0;
-    min-height: 100vh;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(180deg, #ffd1dc 0%, #ffe0e8 45%, #fff0f5 100%);
-">
+{% extends 'base.html' %}
 
-    <div style="text-align: center; padding: 70px 20px 35px;">
-        <h1 style="
-            color: #b03060;
-            font-size: 42px;
-            margin-bottom: 12px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.08);
-        ">
-            💖 Halaman About 💖
-        </h1>
+{% block title %}About{% endblock %}
 
-        <p style="
-            color: #8a4d63;
-            font-size: 20px;
-            margin: 0;
-        ">
-            Ini adalah halaman about
-        </p>
-    </div>
+{% block content %}
 
-    <div style="
-        background: linear-gradient(180deg, rgba(255,255,255,0.40) 0%, rgba(255,255,255,0.22) 100%);
-        width: 56%;
-        margin: 0 auto 60px auto;
-        padding: 28px 24px;
-        border-radius: 26px;
-        text-align: center;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-        border: 1px solid rgba(255,255,255,0.35);
-    ">
-        <h2 style="
-            color: #d45d79;
-            font-size: 28px;
-            margin-bottom: 12px;
-        ">
-            Tentang Website Ini ✨
-        </h2>
+<div class="app-card text-center">
+    <i class="bi bi-info-circle-fill text-primary" style="font-size: 3rem;"></i>
 
-        <p style="
-            font-size: 17px;
-            color: #5a4a52;
-            line-height: 1.7;
-            margin-bottom: 10px;
-        ">
-            Halaman ini berisi informasi mengenai website praktikum yang dibuat menggunakan Django.
-        </p>
+    <h2 class="section-title mt-3 mb-3">Tentang Smart Reporting</h2>
 
-        <div style="margin-top: 24px;">
-            <a href="/" style="
-                text-decoration: none;
-                background-color: #4da6ff;
-                color: white;
-                padding: 12px 24px;
-                border-radius: 12px;
-                margin: 8px;
-                display: inline-block;
-                font-weight: bold;
-            ">Home</a>
+    <p class="text-muted mb-4">
+        Smart Reporting adalah aplikasi pelaporan masyarakat yang dirancang untuk membantu
+        warga Kota Bandar Lampung menyampaikan berbagai permasalahan lingkungan, fasilitas umum,
+        dan infrastruktur secara lebih mudah, cepat, dan terstruktur.
+    </p>
 
-            <a href="/contacts/" style="
-                text-decoration: none;
-                background-color: #7ccf6b;
-                color: white;
-                padding: 12px 24px;
-                border-radius: 12px;
-                margin: 8px;
-                display: inline-block;
-                font-weight: bold;
-            ">Contacts</a>
+    <div class="row g-3 text-start mt-2">
+        <div class="col-md-4">
+            <div class="p-3 rounded border bg-light h-100">
+                <h5 class="fw-bold">Fungsi Utama</h5>
+                <p class="mb-0 text-muted">
+                    Aplikasi ini digunakan untuk membuat, mengelola, dan memantau laporan masyarakat
+                    terkait kondisi lingkungan, infrastruktur, dan fasilitas publik.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="p-3 rounded border bg-light h-100">
+                <h5 class="fw-bold">Fitur Utama</h5>
+                <p class="mb-0 text-muted">
+                    Pengguna dapat menambahkan laporan, melihat detail laporan, mengubah data,
+                    menghapus data, serta memantau perubahan status laporan.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="p-3 rounded border bg-light h-100">
+                <h5 class="fw-bold">Manfaat</h5>
+                <p class="mb-0 text-muted">
+                    Smart Reporting membantu proses pelaporan menjadi lebih tertata, informatif,
+                    dan mudah dipahami baik oleh pengguna maupun pengelola sistem.
+                </p>
+            </div>
         </div>
     </div>
+</div>
 
-</body>
-</html>
+{% endblock %}

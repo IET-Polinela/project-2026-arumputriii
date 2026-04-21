@@ -1,55 +1,38 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hapus Laporan</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 30px;
-            line-height: 1.6;
-        }
+{% extends 'base.html' %}
 
-        .delete-box {
-            max-width: 600px;
-            border: 1px solid #ccc;
-            padding: 20px;
-            border-radius: 6px;
-        }
+{% block title %}Hapus Laporan{% endblock %}
 
-        h1 {
-            margin-bottom: 20px;
-        }
+{% block content %}
 
-        .message {
-            margin-bottom: 20px;
-        }
+<div class="app-card">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'report_list' %}">Reports</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Hapus Laporan</li>
+        </ol>
+    </nav>
 
-        .actions button {
-            margin-right: 10px;
-        }
-
-        .cancel-link {
-            display: inline-block;
-            margin-top: 10px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Hapus Laporan</h1>
-
-    <div class="delete-box">
-        <p class="message">
-            Yakin ingin menghapus laporan "<strong>{{ object.title }}</strong>"?
-        </p>
-
-        <form method="post" class="actions">
-            {% csrf_token %}
-            <button type="submit">Ya, Hapus</button>
-        </form>
-
-        <a href="{% url 'report_list' %}" class="cancel-link">Batal</a>
+    <div class="d-flex align-items-center gap-2 mb-3">
+        <i class="bi bi-trash-fill text-danger fs-4"></i>
+        <h2 class="section-title mb-0">Hapus Laporan</h2>
     </div>
-</body>
-</html>
+
+    <p class="mb-4">
+        Yakin ingin menghapus laporan <strong>"{{ object.title }}"</strong>?
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="d-flex flex-wrap gap-2">
+            <button type="submit" class="btn btn-danger">
+                <i class="bi bi-trash me-1"></i> Ya, Hapus
+            </button>
+            <a href="{% url 'report_list' %}" class="btn btn-secondary">
+                <i class="bi bi-x-circle me-1"></i> Batal
+            </a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

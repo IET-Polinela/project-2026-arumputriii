@@ -1,121 +1,27 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Laporan</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 30px;
-            line-height: 1.6;
-        }
+{% extends 'base.html' %}
 
-        .page-header {
-            margin-bottom: 25px;
-        }
+{% block title %}Home{% endblock %}
 
-        .page-header h1 {
-            margin-bottom: 10px;
-        }
+{% block content %}
 
-        .page-header p {
-            margin: 0;
-        }
+<div class="app-card text-center">
+    <div class="py-4">
+        <i class="bi bi-megaphone-fill text-primary" style="font-size: 3rem;"></i>
+        <h2 class="section-title mt-3 mb-3">Selamat Datang di Smart Reporting</h2>
+        <p class="text-muted mb-4">
+            Platform pelaporan masyarakat untuk membantu warga Kota Bandar Lampung
+            menyampaikan permasalahan secara cepat, terstruktur, dan mudah dipantau.
+        </p>
 
-        .top-action {
-            margin-bottom: 25px;
-        }
-
-        .report-box {
-            border: 1px solid #ccc;
-            padding: 18px;
-            margin-bottom: 20px;
-            border-radius: 6px;
-        }
-
-        .report-box h2 {
-            margin-top: 0;
-            margin-bottom: 12px;
-            font-size: 24px;
-        }
-
-        .report-box p {
-            margin: 6px 0;
-        }
-
-        .actions {
-            margin-top: 12px;
-        }
-
-        .actions a,
-        .status-form button {
-            margin-right: 8px;
-        }
-
-        .status-form {
-            margin-top: 12px;
-        }
-
-        .empty-message {
-            border: 1px solid #ccc;
-            padding: 18px;
-            border-radius: 6px;
-        }
-    </style>
-</head>
-<body>
-    <div class="page-header">
-        <h1>Smart Reporting - Kota Bandar Lampung</h1>
-        <p><em>"Laporkan Masalahnya, Pantau Solusinya, Nikmati Perubahannya."</em></p>
-    </div>
-
-    <div class="top-action">
-        <a href="{% url 'report_add' %}">Tambah Laporan</a>
-    </div>
-
-    {% for report in reports %}
-        <div class="report-box">
-            <h2>{{ report.title }}</h2>
-            <p><strong>Kategori:</strong> {{ report.category }}</p>
-            <p><strong>Lokasi:</strong> {{ report.location }}</p>
-            <p><strong>Status:</strong> {{ report.get_status_display }}</p>
-
-            <div class="actions">
-                <a href="{% url 'report_detail' report.pk %}">Detail</a>
-                <a href="{% url 'report_edit' report.pk %}">Edit</a>
-                <a href="{% url 'report_delete' report.pk %}">Hapus</a>
-            </div>
-
-            {% if report.status == 'REPORTED' %}
-                <form method="post" action="{% url 'report_update_status' report.pk %}" class="status-form">
-                    {% csrf_token %}
-                    <input type="hidden" name="status" value="VERIFIED">
-                    <button type="submit">Ubah ke Verified</button>
-                </form>
-
-            {% elif report.status == 'VERIFIED' %}
-                <form method="post" action="{% url 'report_update_status' report.pk %}" class="status-form">
-                    {% csrf_token %}
-                    <input type="hidden" name="status" value="IN_PROGRESS">
-                    <button type="submit">Ubah ke In Progress</button>
-                </form>
-
-            {% elif report.status == 'IN_PROGRESS' %}
-                <form method="post" action="{% url 'report_update_status' report.pk %}" class="status-form">
-                    {% csrf_token %}
-                    <input type="hidden" name="status" value="RESOLVED">
-                    <button type="submit">Ubah ke Resolved</button>
-                </form>
-
-            {% elif report.status == 'RESOLVED' %}
-                <p><strong>Laporan sudah selesai.</strong></p>
-            {% endif %}
+        <div class="d-flex justify-content-center gap-2 flex-wrap">
+            <a href="{% url 'report_list' %}" class="btn btn-primary">
+                <i class="bi bi-file-earmark-text me-1"></i> Lihat Laporan
+            </a>
+            <a href="{% url 'report_add' %}" class="btn btn-success">
+                <i class="bi bi-plus-circle me-1"></i> Buat Laporan
+            </a>
         </div>
-    {% empty %}
-        <div class="empty-message">
-            <p>Belum ada laporan.</p>
-        </div>
-    {% endfor %}
-</body>
-</html>
+    </div>
+</div>
+
+{% endblock %}
