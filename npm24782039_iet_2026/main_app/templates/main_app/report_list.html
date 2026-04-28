@@ -13,7 +13,11 @@
     </nav>
 
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <h2 class="section-title">Daftar Laporan</h2>
+        <div>
+            <h2 class="section-title mb-1">Daftar Laporan</h2>
+            <p class="text-muted mb-0">Lihat seluruh laporan yang masuk ke sistem Smart Reporting.</p>
+        </div>
+
         <a href="{% url 'report_add' %}" class="btn btn-primary">
             <i class="bi bi-plus-circle me-1"></i> Tambah Laporan
         </a>
@@ -28,7 +32,7 @@
                     <th>Kategori</th>
                     <th>Lokasi</th>
                     <th>Status</th>
-                    <th style="min-width: 280px;">Aksi</th>
+                    <th style="min-width: 320px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -50,36 +54,41 @@
                             <span class="badge bg-dark">{{ report.status }}</span>
                         {% endif %}
                     </td>
-                    <td class="d-flex flex-wrap gap-1">
-                        <a href="{% url 'report_detail' report.id %}" class="btn btn-sm btn-secondary">
-                            <i class="bi bi-eye me-1"></i> Detail
-                        </a>
+                    <td>
+                        <div class="d-flex flex-wrap gap-1">
+                            <a href="{% url 'report_detail' report.id %}" class="btn btn-sm btn-secondary">
+                                <i class="bi bi-eye me-1"></i> Detail
+                            </a>
 
-                        {% if report.status == 'REPORTED' %}
-                            <form method="post" action="{% url 'report_update_status' report.id %}" class="d-inline"
-                                  onsubmit="return confirm('Yakin ingin mengubah status laporan ini menjadi VERIFIED?')">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-primary">Verifikasi</button>
-                            </form>
-                        {% elif report.status == 'VERIFIED' %}
-                            <form method="post" action="{% url 'report_update_status' report.id %}" class="d-inline"
-                                  onsubmit="return confirm('Yakin ingin mengubah status laporan ini menjadi IN PROGRESS?')">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-warning">Proses</button>
-                            </form>
-                        {% elif report.status == 'IN_PROGRESS' %}
-                            <form method="post" action="{% url 'report_update_status' report.id %}" class="d-inline"
-                                  onsubmit="return confirm('Yakin ingin mengubah status laporan ini menjadi RESOLVED?')">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-success">Selesai</button>
-                            </form>
-                        {% endif %}
+                            {% if report.status == 'REPORTED' %}
+                                <form method="post" action="{% url 'report_update_status' report.id %}" class="d-inline"
+                                      onsubmit="return confirm('Yakin ingin mengubah status laporan ini menjadi VERIFIED?')">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-primary">Verifikasi</button>
+                                </form>
+                            {% elif report.status == 'VERIFIED' %}
+                                <form method="post" action="{% url 'report_update_status' report.id %}" class="d-inline"
+                                      onsubmit="return confirm('Yakin ingin mengubah status laporan ini menjadi IN PROGRESS?')">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-warning text-dark">Proses</button>
+                                </form>
+                            {% elif report.status == 'IN_PROGRESS' %}
+                                <form method="post" action="{% url 'report_update_status' report.id %}" class="d-inline"
+                                      onsubmit="return confirm('Yakin ingin mengubah status laporan ini menjadi RESOLVED?')">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-success">Selesai</button>
+                                </form>
+                            {% endif %}
 
-                        <a href="{% url 'report_edit' report.id %}" class="btn btn-sm btn-info text-white">Edit</a>
-                        <a href="{% url 'report_delete' report.id %}" class="btn btn-sm btn-danger"
-                           onclick="return confirm('Yakin ingin menghapus laporan ini?')">
-                            Hapus
-                        </a>
+                            <a href="{% url 'report_edit' report.id %}" class="btn btn-sm btn-info text-white">
+                                <i class="bi bi-pencil-square me-1"></i> Edit
+                            </a>
+
+                            <a href="{% url 'report_delete' report.id %}" class="btn btn-sm btn-danger"
+                               onclick="return confirm('Yakin ingin menghapus laporan ini?')">
+                                <i class="bi bi-trash me-1"></i> Hapus
+                            </a>
+                        </div>
                     </td>
                 </tr>
                 {% endfor %}
@@ -91,7 +100,9 @@
         <i class="bi bi-inbox"></i>
         <h4>Belum ada laporan</h4>
         <p class="text-muted">Silakan tambahkan laporan pertama untuk mulai menggunakan sistem.</p>
-        <a href="{% url 'report_add' %}" class="btn btn-primary mt-2">Tambah Laporan</a>
+        <a href="{% url 'report_add' %}" class="btn btn-primary mt-2">
+            <i class="bi bi-plus-circle me-1"></i> Tambah Laporan
+        </a>
     </div>
     {% endif %}
 </div>

@@ -29,12 +29,32 @@
         }
 
         .navbar .nav-link {
-            color: rgba(255,255,255,0.9) !important;
+            color: rgba(255, 255, 255, 0.9) !important;
             font-weight: 500;
+            transition: 0.2s ease;
         }
 
         .navbar .nav-link:hover {
             color: white !important;
+            transform: translateY(-1px);
+        }
+
+        .user-greeting {
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 500;
+            margin-right: 10px;
+        }
+
+        .logout-form {
+            display: inline;
+            margin: 0;
+        }
+
+        .logout-form button {
+            border-radius: 10px;
+            padding: 6px 12px;
+            font-size: 0.82rem;
+            font-weight: 600;
         }
 
         .app-hero {
@@ -134,13 +154,17 @@
             box-shadow: 0 6px 14px rgba(37, 99, 235, 0.18);
         }
 
-        .form-control {
+        .form-control,
+        .form-select,
+        textarea {
             border-radius: 14px;
             padding: 12px 14px;
             border: 1px solid #d1d5db;
         }
 
-        .form-control:focus {
+        .form-control:focus,
+        .form-select:focus,
+        textarea:focus {
             border-color: #86b7fe;
             box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.15);
         }
@@ -191,6 +215,16 @@
             .section-title {
                 font-size: 1.6rem;
             }
+
+            .user-greeting {
+                display: block;
+                margin: 8px 0;
+            }
+
+            .logout-form button {
+                width: 100%;
+                margin-top: 8px;
+            }
         }
     </style>
 </head>
@@ -201,16 +235,44 @@
             <a class="navbar-brand" href="{% url 'home_page' %}">
                 <i class="bi bi-shield-check me-2"></i>Smart Reporting
             </a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse mt-2 mt-lg-0" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="{% url 'home_page' %}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'report_list' %}">Reports</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/contacts/">Contact</a></li>
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home_page' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'report_list' %}">Reports</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about/">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contacts/">Contact</a>
+                    </li>
+
+                    {% if user.is_authenticated %}
+                        <li class="nav-item ms-lg-3">
+                            <span class="user-greeting">Halo, {{ user.username }}</span>
+                        </li>
+                        <li class="nav-item">
+                            <form method="post" action="{% url 'logout' %}" class="logout-form">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Logout</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'register' %}">Register</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

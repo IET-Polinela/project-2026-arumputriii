@@ -15,21 +15,34 @@
 
     <div class="d-flex align-items-center gap-2 mb-4">
         <i class="bi bi-file-earmark-text-fill text-primary fs-4"></i>
-        <h2 class="section-title mb-0">Detail Laporan</h2>
+        <div>
+            <h2 class="section-title mb-1">Detail Laporan</h2>
+            <p class="text-muted mb-0">Informasi lengkap dari laporan yang dipilih.</p>
+        </div>
     </div>
 
     <div class="row g-4">
         <div class="col-md-6">
-            <div class="p-3 rounded border bg-light h-100">
-                <p class="mb-3"><strong>Judul:</strong><br>{{ report.title }}</p>
-                <p class="mb-3"><strong>Kategori:</strong><br>{{ report.category }}</p>
-                <p class="mb-0"><strong>Lokasi:</strong><br>{{ report.location }}</p>
+            <div class="p-4 rounded-4 border bg-light h-100 shadow-sm">
+                <p class="mb-3">
+                    <strong>Judul</strong><br>
+                    <span class="text-muted">{{ report.title }}</span>
+                </p>
+                <p class="mb-3">
+                    <strong>Kategori</strong><br>
+                    <span class="text-muted">{{ report.category }}</span>
+                </p>
+                <p class="mb-0">
+                    <strong>Lokasi</strong><br>
+                    <span class="text-muted">{{ report.location }}</span>
+                </p>
             </div>
         </div>
 
         <div class="col-md-6">
-            <div class="p-3 rounded border bg-light h-100">
-                <p class="mb-3"><strong>Status:</strong><br>
+            <div class="p-4 rounded-4 border bg-light h-100 shadow-sm">
+                <p class="mb-3">
+                    <strong>Status</strong><br>
                     {% if report.status == 'REPORTED' %}
                         <span class="badge bg-secondary">Reported</span>
                     {% elif report.status == 'VERIFIED' %}
@@ -42,14 +55,17 @@
                         <span class="badge bg-dark">{{ report.status }}</span>
                     {% endif %}
                 </p>
-                <p class="mb-0"><strong>Dibuat:</strong><br>{{ report.created_at }}</p>
+                <p class="mb-0">
+                    <strong>Dibuat</strong><br>
+                    <span class="text-muted">{{ report.created_at }}</span>
+                </p>
             </div>
         </div>
     </div>
 
     <div class="mt-4">
-        <p class="fw-bold mb-2">Deskripsi</p>
-        <div class="p-3 rounded border bg-light">
+        <h5 class="fw-bold mb-2">Deskripsi</h5>
+        <div class="p-4 rounded-4 border bg-light shadow-sm" style="line-height: 1.8;">
             {{ report.description }}
         </div>
     </div>
