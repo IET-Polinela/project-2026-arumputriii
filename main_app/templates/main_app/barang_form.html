@@ -4,57 +4,113 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-7">
+    <div class="col-lg-7 col-md-9">
         <div class="page-card">
-            <h1 class="h3 mb-3">Form Barang</h1>
-            <p class="text-muted">
-                Isi data barang sesuai stok yang tersedia di warung.
-            </p>
+            <div class="text-center mb-4">
+                <div class="bg-success-subtle text-success rounded-4 d-inline-flex px-3 py-2 mb-3">
+                    <i class="bi bi-box-seam fs-2"></i>
+                </div>
+
+                <h1 class="h3 fw-bold mb-1">
+                    Form Barang
+                </h1>
+
+                <p class="text-muted mb-0">
+                    Isi data barang sesuai stok yang tersedia di Warung Arum.
+                </p>
+            </div>
 
             <form method="POST">
                 {% csrf_token %}
 
                 <div class="mb-3">
-                    <label class="form-label">Nama Barang</label>
-                    {{ form.nama }}
-                    <div class="text-danger small">
+                    <label class="form-label fw-semibold">
+                        Nama Barang
+                    </label>
+
+                    <div class="input-group">
+                        <span class="input-group-text bg-white">
+                            <i class="bi bi-bag"></i>
+                        </span>
+                        {{ form.nama }}
+                    </div>
+
+                    <div class="text-danger small mt-1">
                         {{ form.nama.errors }}
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Kategori</label>
-                    {{ form.kategori }}
-                    <div class="text-danger small">
+                    <label class="form-label fw-semibold">
+                        Kategori
+                    </label>
+
+                    <div class="input-group">
+                        <span class="input-group-text bg-white">
+                            <i class="bi bi-tags"></i>
+                        </span>
+                        {{ form.kategori }}
+                    </div>
+
+                    <div class="text-danger small mt-1">
                         {{ form.kategori.errors }}
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Harga Beli</label>
-                    {{ form.harga_beli }}
-                    <div class="text-danger small">
+                    <label class="form-label fw-semibold">
+                        Harga Beli
+                    </label>
+
+                    <div class="input-group">
+                        <span class="input-group-text bg-white">
+                            Rp
+                        </span>
+                        {{ form.harga_beli }}
+                    </div>
+
+                    <div class="form-text">
+                        Harga jual akan dihitung di modal dengan rumus:
+                        <strong>Harga Beli + 39</strong>.
+                    </div>
+
+                    <div class="text-danger small mt-1">
                         {{ form.harga_beli.errors }}
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Stok</label>
-                    {{ form.stok }}
-                    <div class="text-danger small">
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">
+                        Stok
+                    </label>
+
+                    <div class="input-group">
+                        <span class="input-group-text bg-white">
+                            <i class="bi bi-stack"></i>
+                        </span>
+                        {{ form.stok }}
+                    </div>
+
+                    <div class="text-danger small mt-1">
                         {{ form.stok.errors }}
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-success">
-                    Simpan
-                </button>
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <a href="{% url 'barang_list' %}" class="btn btn-secondary">
+                        Kembali
+                    </a>
 
-                <a href="{% url 'barang_list' %}" class="btn btn-secondary">
-                    Kembali
-                </a>
+                    <button type="submit" class="btn btn-success">
+                        Simpan Barang
+                    </button>
+                </div>
             </form>
         </div>
+
+        <p class="text-center text-muted small mt-3 mb-0">
+            Pastikan nama, kategori, harga beli, dan stok sudah benar sebelum disimpan.
+        </p>
     </div>
 </div>
 {% endblock %}

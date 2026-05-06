@@ -4,47 +4,84 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-7">
+    <div class="col-lg-7 col-md-9">
         <div class="page-card">
-            <div class="alert alert-danger">
-                <h1 class="h4 mb-1">Konfirmasi Hapus Barang</h1>
-                <p class="mb-0">
+            <div class="text-center mb-4">
+                <div class="bg-danger-subtle text-danger rounded-4 d-inline-flex px-3 py-2 mb-3">
+                    <i class="bi bi-exclamation-triangle fs-2"></i>
+                </div>
+
+                <h1 class="h3 fw-bold mb-1 text-danger">
+                    Konfirmasi Hapus Barang
+                </h1>
+
+                <p class="text-muted mb-0">
                     Data yang sudah dihapus tidak dapat dikembalikan.
                 </p>
             </div>
 
-            <p>Yakin ingin menghapus barang berikut?</p>
+            <div class="alert alert-danger rounded-4">
+                <strong>Perhatian!</strong>
+                Pastikan barang yang dihapus sudah benar sebelum melanjutkan.
+            </div>
 
-            <div class="border rounded p-3 mb-3">
-                <h2 class="h5">{{ object.nama }}</h2>
-                <p class="mb-1">
-                    <strong>Kategori:</strong>
-                    {{ object.get_kategori_display }}
-                </p>
-                <p class="mb-1">
-                    <strong>Harga Beli:</strong>
-                    Rp{{ object.harga_beli }}
-                </p>
-                <p class="mb-0">
-                    <strong>Stok:</strong>
-                    {{ object.stok }}
-                </p>
+            <div class="border rounded-4 p-4 mb-4 bg-light">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+                    <div>
+                        <div class="small text-muted">
+                            Nama Barang
+                        </div>
+                        <h2 class="h5 fw-bold mb-0">
+                            {{ object.nama }}
+                        </h2>
+                    </div>
+
+                    <span class="badge bg-success">
+                        {{ object.get_kategori_display }}
+                    </span>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="bg-warning-subtle rounded-4 p-3">
+                            <div class="small text-warning-emphasis">
+                                Harga Beli
+                            </div>
+                            <div class="fw-bold text-warning-emphasis">
+                                Rp{{ object.harga_beli }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="bg-info-subtle rounded-4 p-3">
+                            <div class="small text-info-emphasis">
+                                Stok
+                            </div>
+                            <div class="fw-bold text-info-emphasis">
+                                {{ object.stok }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <form method="POST">
                 {% csrf_token %}
 
-                <button
-                    type="submit"
-                    class="btn btn-danger"
-                    onclick="return confirm('Yakin ingin menghapus barang ini?')"
-                >
-                    Hapus
-                </button>
+                <div class="d-flex justify-content-center gap-2 flex-wrap">
+                    <a href="{% url 'barang_list' %}" class="btn btn-secondary">
+                        Batal
+                    </a>
 
-                <a href="{% url 'barang_list' %}" class="btn btn-secondary">
-                    Batal
-                </a>
+                    <button
+                        type="submit"
+                        class="btn btn-danger"
+                        onclick="return confirm('Yakin ingin menghapus barang ini?')"
+                    >
+                        Hapus Permanen
+                    </button>
+                </div>
             </form>
         </div>
     </div>

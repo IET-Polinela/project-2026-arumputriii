@@ -3,41 +3,86 @@
 {% block title %}Stok Barang{% endblock %}
 
 {% block content %}
-<div class="page-card">
-    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+<div class="page-card mb-4">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
         <div>
-            <h1 class="h3 mb-1">Stok Barang Warung</h1>
+            <span class="badge bg-success-subtle text-success mb-2">
+                Sistem Inventori Warung
+            </span>
+
+            <h1 class="h3 fw-bold mb-1">
+                Stok Barang Warung
+            </h1>
+
             <p class="text-muted mb-0">
-                Daftar barang dan stok yang tersedia di warung.
+                Kelola data barang, kategori, harga beli, dan jumlah stok yang tersedia.
             </p>
         </div>
 
         {% if user.is_authenticated and user.is_owner %}
             <a href="{% url 'barang_create' %}" class="btn btn-success">
+                <i class="bi bi-plus-circle me-1"></i>
                 Tambah Barang
             </a>
         {% endif %}
     </div>
+</div>
 
-    <div class="mb-3">
-        <label for="liveSearchInput" class="form-label">Live Search</label>
-        <input
-            type="text"
-            id="liveSearchInput"
-            class="form-control"
-            placeholder="Cari nama, kategori, harga beli, atau stok..."
-        >
+<div class="page-card">
+    <div class="row align-items-center mb-4 g-3">
+        <div class="col-md-7">
+            <label for="liveSearchInput" class="form-label fw-semibold">
+                Live Search
+            </label>
+
+            <div class="input-group">
+                <span class="input-group-text bg-white">
+                    <i class="bi bi-search"></i>
+                </span>
+
+                <input
+                    type="text"
+                    id="liveSearchInput"
+                    class="form-control"
+                    placeholder="Cari nama, kategori, harga beli, atau stok..."
+                >
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="bg-success-subtle border border-success-subtle rounded-4 p-3">
+                <div class="small text-success fw-semibold">
+                    Status Akses
+                </div>
+
+                {% if user.is_authenticated and user.is_owner %}
+                    <div class="fw-bold">
+                        Anda login sebagai Owner
+                    </div>
+                    <div class="small text-muted">
+                        Dapat menambah, mengubah, dan menghapus barang.
+                    </div>
+                {% else %}
+                    <div class="fw-bold">
+                        Anda login sebagai Staff
+                    </div>
+                    <div class="small text-muted">
+                        Hanya dapat melihat stok barang dan dashboard statistik.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
 
     {% if barangs %}
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover">
-                <thead class="table-success">
+        <div class="table-responsive rounded-4 border">
+            <table class="table table-hover align-middle">
+                <thead>
                     <tr>
-                        <th>Nama</th>
+                        <th>Nama Barang</th>
                         <th>Kategori</th>
-                        <th>Harga Beli</th>
-                        <th>Stok</th>
+                        <th class="text-end">Harga Beli</th>
+                        <th class="text-end">Stok</th>
                         <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -45,10 +90,31 @@
                 <tbody id="barangTableBody">
                     {% for barang in barangs %}
                         <tr>
-                            <td>{{ barang.nama }}</td>
-                            <td>{{ barang.get_kategori_display }}</td>
-                            <td>Rp{{ barang.harga_beli }}</td>
-                            <td>{{ barang.stok }}</td>
+                            <td>
+                                <div class="fw-semibold">
+                                    {{ barang.nama }}
+                                </div>
+                                <div class="small text-muted">
+                                    ID Barang: #{{ barang.pk }}
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="badge bg-success-subtle text-success">
+                                    {{ barang.get_kategori_display }}
+                                </span>
+                            </td>
+
+                            <td class="text-end fw-semibold">
+                                Rp{{ barang.harga_beli }}
+                            </td>
+
+                            <td class="text-end">
+                                <span class="badge bg-light text-dark border">
+                                    {{ barang.stok }}
+                                </span>
+                            </td>
+
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-1 flex-wrap">
                                     <button
@@ -56,7 +122,8 @@
                                         class="btn btn-sm btn-primary info-modal-btn"
                                         data-id="{{ barang.pk }}"
                                     >
-                                        Info Modal
+                                        <i class="bi bi-info-circle me-1"></i>
+                                        Info
                                     </button>
 
                                     <a
@@ -90,14 +157,22 @@
         </div>
     {% else %}
         <div class="empty-state">
-            <h2 class="h5">Belum ada data barang.</h2>
+            <div class="mb-3">
+                <i class="bi bi-box-seam display-5 text-success"></i>
+            </div>
+
+            <h2 class="h5 fw-bold">
+                Belum ada data barang.
+            </h2>
+
             <p class="text-muted mb-3">
-                Data barang akan ditampilkan di sini.
+                Data barang akan ditampilkan di sini setelah Owner menambahkan stok.
             </p>
 
             {% if user.is_authenticated and user.is_owner %}
                 <a href="{% url 'barang_create' %}" class="btn btn-success">
-                    Tambah Barang
+                    <i class="bi bi-plus-circle me-1"></i>
+                    Tambah Barang Pertama
                 </a>
             {% endif %}
         </div>
@@ -105,44 +180,78 @@
 </div>
 
 <div class="modal fade" id="barangInfoModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 id="modalNamaBarang" class="modal-title">Info Barang</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <div class="modal-header bg-success text-white rounded-top-4">
+                <div>
+                    <h5 id="modalNamaBarang" class="modal-title fw-bold">
+                        Info Barang
+                    </h5>
+                    <small class="text-white-50">
+                        Detail barang dan perhitungan harga jual
+                    </small>
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal"
+                ></button>
             </div>
 
-            <div class="modal-body">
-                <p>
-                    <strong>Nama:</strong>
-                    <span id="modalNama"></span>
-                </p>
+            <div class="modal-body p-4">
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <div class="border rounded-4 p-3 h-100">
+                            <div class="small text-muted">
+                                Nama Barang
+                            </div>
+                            <div id="modalNama" class="fw-bold"></div>
+                        </div>
+                    </div>
 
-                <p>
-                    <strong>Kategori:</strong>
-                    <span id="modalKategori"></span>
-                </p>
+                    <div class="col-md-6">
+                        <div class="border rounded-4 p-3 h-100">
+                            <div class="small text-muted">
+                                Kategori
+                            </div>
+                            <div id="modalKategori" class="fw-bold"></div>
+                        </div>
+                    </div>
 
-                <p>
-                    <strong>Harga Beli:</strong>
-                    <span id="modalHargaBeli"></span>
-                </p>
+                    <div class="col-md-6">
+                        <div class="border rounded-4 p-3 h-100">
+                            <div class="small text-muted">
+                                Harga Beli
+                            </div>
+                            <div id="modalHargaBeli" class="fw-bold"></div>
+                        </div>
+                    </div>
 
-                <p>
-                    <strong>Stok:</strong>
-                    <span id="modalStok"></span>
-                </p>
+                    <div class="col-md-6">
+                        <div class="border rounded-4 p-3 h-100">
+                            <div class="small text-muted">
+                                Stok
+                            </div>
+                            <div id="modalStok" class="fw-bold"></div>
+                        </div>
+                    </div>
+                </div>
 
-                <hr>
+                <div class="alert alert-success rounded-4 mb-0">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <div>
+                            <h2 class="h5 fw-bold mb-1">
+                                Harga Jual
+                            </h2>
 
-                <div class="alert alert-success">
-                    <h2 class="h5 mb-1">Harga Jual</h2>
-                    <p class="mb-0">
-                        <strong id="modalHargaJual"></strong>
-                    </p>
-                    <small class="text-muted">
-                        Rumus: Harga Jual = Harga Beli + 39
-                    </small>
+                            <small class="text-muted">
+                                Rumus: Harga Jual = Harga Beli + 39
+                            </small>
+                        </div>
+
+                        <div id="modalHargaJual" class="h4 fw-bold mb-0"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -167,7 +276,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 class="btn btn-sm btn-primary info-modal-btn"
                 data-id="${barang.id}"
             >
-                Info Modal
+                <i class="bi bi-info-circle me-1"></i>
+                Info
             </button>
 
             <a href="/barang/${barang.id}/" class="btn btn-sm btn-outline-success">
@@ -208,10 +318,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
         tableBody.innerHTML = barangs.map(barang => `
             <tr>
-                <td>${barang.nama}</td>
-                <td>${barang.kategori_display}</td>
-                <td>${formatRupiah(barang.harga_beli)}</td>
-                <td>${barang.stok}</td>
+                <td>
+                    <div class="fw-semibold">${barang.nama}</div>
+                    <div class="small text-muted">ID Barang: #${barang.id}</div>
+                </td>
+
+                <td>
+                    <span class="badge bg-success-subtle text-success">
+                        ${barang.kategori_display}
+                    </span>
+                </td>
+
+                <td class="text-end fw-semibold">
+                    ${formatRupiah(barang.harga_beli)}
+                </td>
+
+                <td class="text-end">
+                    <span class="badge bg-light text-dark border">
+                        ${barang.stok}
+                    </span>
+                </td>
+
                 <td class="text-center">
                     <div class="d-flex justify-content-center gap-1 flex-wrap">
                         ${renderActions(barang)}

@@ -4,26 +4,121 @@
 
 {% block content %}
 <div class="page-card mb-4">
-    <h1 class="h3 mb-1">Dashboard Statistik</h1>
-    <p class="text-muted mb-0">
-        Visualisasi total stok barang berdasarkan kategori.
-    </p>
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+        <div>
+            <span class="badge bg-success-subtle text-success mb-2">
+                Dashboard Inventori
+            </span>
+
+            <h1 class="h3 fw-bold mb-1">
+                Dashboard Statistik
+            </h1>
+
+            <p class="text-muted mb-0">
+                Visualisasi total stok barang berdasarkan kategori warung.
+            </p>
+        </div>
+
+        <div class="text-end">
+            <div class="small text-muted">
+                Data Source
+            </div>
+            <div class="fw-semibold text-success">
+                JsonResponse + Chart.js
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="page-card h-100">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="text-muted small">
+                        Jumlah Kategori
+                    </div>
+                    <div id="totalKategori" class="h3 fw-bold mb-0 text-success">
+                        -
+                    </div>
+                </div>
+
+                <div class="bg-success-subtle text-success rounded-4 px-3 py-2">
+                    <i class="bi bi-tags fs-3"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="page-card h-100">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="text-muted small">
+                        Total Semua Stok
+                    </div>
+                    <div id="totalStok" class="h3 fw-bold mb-0 text-success">
+                        -
+                    </div>
+                </div>
+
+                <div class="bg-success-subtle text-success rounded-4 px-3 py-2">
+                    <i class="bi bi-box-seam fs-3"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="page-card h-100">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="text-muted small">
+                        Status Dashboard
+                    </div>
+                    <div id="dashboardStatus" class="h5 fw-bold mb-0 text-success">
+                        Memuat...
+                    </div>
+                </div>
+
+                <div class="bg-success-subtle text-success rounded-4 px-3 py-2">
+                    <i class="bi bi-activity fs-3"></i>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row g-4">
     <div class="col-lg-8">
-        <div class="page-card">
-            <h2 class="h5 mb-3">Total Stok Per Kategori</h2>
-            <canvas id="stokKategoriChart"></canvas>
+        <div class="page-card h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <div>
+                    <h2 class="h5 fw-bold mb-1">
+                        Total Stok Per Kategori
+                    </h2>
+                    <p class="text-muted mb-0 small">
+                        Bar chart menampilkan akumulasi stok berdasarkan kategori barang.
+                    </p>
+                </div>
+            </div>
+
+            <div style="height: 360px;">
+                <canvas id="stokKategoriChart"></canvas>
+            </div>
         </div>
     </div>
 
     <div class="col-lg-4">
-        <div class="page-card">
-            <h2 class="h5 mb-3">Ringkasan</h2>
+        <div class="page-card h-100">
+            <h2 class="h5 fw-bold mb-3">
+                Ringkasan Kategori
+            </h2>
 
             <div id="summaryBox">
-                <p class="text-muted mb-0">Memuat data...</p>
+                <div class="text-muted">
+                    Memuat data...
+                </div>
             </div>
         </div>
     </div>
@@ -49,14 +144,32 @@ document.addEventListener('DOMContentLoaded', function () {
                     labels: kategoriLabels,
                     datasets: [{
                         label: 'Total Stok',
-                        data: totalStokValues
+                        data: totalStokValues,
+                        borderWidth: 1,
+                        borderRadius: 10
                     }]
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return `Total Stok: ${context.raw}`;
+                                }
+                            }
+                        }
+                    },
                     scales: {
                         y: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
                         }
                     }
                 }
@@ -65,17 +178,47 @@ document.addEventListener('DOMContentLoaded', function () {
             const totalSemuaStok = totalStokValues.reduce((total, value) => total + value, 0);
             const jumlahKategori = kategoriLabels.length;
 
-            document.getElementById('summaryBox').innerHTML = `
-                <p><strong>Jumlah Kategori:</strong> ${jumlahKategori}</p>
-                <p><strong>Total Semua Stok:</strong> ${totalSemuaStok}</p>
+            document.getElementById('totalKategori').textContent = jumlahKategori;
+            document.getElementById('totalStok').textContent = totalSemuaStok;
+            document.getElementById('dashboardStatus').textContent = 'Aktif';
+
+            if (!data.stok_per_kategori.length) {
+                document.getElementById('summaryBox').innerHTML = `
+                    <div class="empty-state py-4">
+                        <p class="text-muted mb-0">
+                            Belum ada data stok untuk ditampilkan.
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+
+            document.getElementById('summaryBox').innerHTML = data.stok_per_kategori.map(item => `
+                <div class="d-flex justify-content-between align-items-center border rounded-4 p-3 mb-2">
+                    <div>
+                        <div class="fw-semibold">
+                            ${item.kategori}
+                        </div>
+                        <div class="small text-muted">
+                            Total stok kategori
+                        </div>
+                    </div>
+
+                    <span class="badge bg-success-subtle text-success fs-6">
+                        ${item.total_stok}
+                    </span>
+                </div>
+            `).join('') + `
                 <hr>
-                <p class="text-muted mb-0">
+                <p class="text-muted small mb-0">
                     Data grafik diambil dari JsonResponse menggunakan Fetch API.
                 </p>
             `;
         })
         .catch(error => {
             console.error('Gagal mengambil data dashboard:', error);
+
+            document.getElementById('dashboardStatus').textContent = 'Error';
 
             document.getElementById('summaryBox').innerHTML = `
                 <div class="alert alert-danger mb-0">
