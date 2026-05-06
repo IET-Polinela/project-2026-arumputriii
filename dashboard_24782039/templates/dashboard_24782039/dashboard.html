@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Statistik{% endblock %}
+
+{% block content %}
+<div class="page-card mb-4">
+    <h1 class="h3 mb-1">Dashboard Statistik</h1>
+    <p class="text-muted mb-0">
+        Visualisasi total stok barang berdasarkan kategori.
+    </p>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="page-card">
+            <h2 class="h5 mb-3">Total Stok Per Kategori</h2>
+            <canvas id="stokKategoriChart"></canvas>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="page-card">
+            <h2 class="h5 mb-3">Ringkasan</h2>
+
+            <div id="summaryBox">
+                <p class="text-muted mb-0">Memuat data...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    fetch("{% url 'dashboard_data' %}")
+        .then(response => response.json())
+        .then(data => {
+            console.log('Dashboard Statistik JSON:', data);
+
+            const kategoriLabels = data.stok_per_kategori.map(item => item.kategori);
+            const totalStokValues = data.stok_per_kategori.map(item => item.total_stok);
+
+            const chartElement = document.getElementById('stokKategoriChart');
+
+            new Chart(chartElement, {
+                type: 'bar',
+                data: {
+                    labels: kategoriLabels,
+                    datasets: [{
+                        label: 'Total Stok',
+                        data: totalStokValues
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            const totalSemuaStok = totalStokValues.reduce((total, value) => total + value, 0);
+            const jumlahKategori = kategoriLabels.length;
+
+            document.getElementById('summaryBox').innerHTML = `
+                <p><strong>Jumlah Kategori:</strong> ${jumlahKategori}</p>
+                <p><strong>Total Semua Stok:</strong> ${totalSemuaStok}</p>
+                <hr>
+                <p class="text-muted mb-0">
+                    Data grafik diambil dari JsonResponse menggunakan Fetch API.
+                </p>
+            `;
+        })
+        .catch(error => {
+            console.error('Gagal mengambil data dashboard:', error);
+
+            document.getElementById('summaryBox').innerHTML = `
+                <div class="alert alert-danger mb-0">
+                    Gagal memuat data dashboard.
+                </div>
+            `;
+        });
+});
+</script>
+{% endblock %}
