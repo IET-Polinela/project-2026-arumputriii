@@ -12,6 +12,8 @@ from django.views.generic import (
 
 from .forms import BarangForm
 from .models import Barang
+from django.db.models import Q
+from django.http import JsonResponse
 
 
 class OwnerRequiredMixin(LoginRequiredMixin):
@@ -73,3 +75,33 @@ class BarangDeleteView(OwnerRequiredMixin, DeleteView):
     def form_valid(self, form):
         messages.success(self.request, 'Barang berhasil dihapus.')
         return super().form_valid(form)
+    
+class BarangSearchJsonView(LoginRequiredMixin, ListView):
+    model = Barang
+
+    def get(self, request, *args, **kwargs):
+        keyword = request.GET.get('q', '')
+
+        barangs = Barang.objects.all().order_by('nama')
+
+        if keyword:
+            barangs = barangs.filter(
+                Q(nama__icontains=keyword)
+                | Q(kategori__icontains=keyword)
+                | Q(harga_beli__icontains=keyword)
+                | Q(stok__icontains=keyword)
+            )
+
+        data = [
+            {
+                'id': barang.id,
+                'nama': barang.nama,
+                'kategori': barang.kategori,
+                'kategori_display': barang.get_kategori_display(),
+                'harga_beli': barang.harga_beli,
+                'stok': barang.stok,
+            }
+            for barang in barangs[:50]
+        ]
+
+        return JsonResponse({'barangs': data})

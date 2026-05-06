@@ -19,6 +19,16 @@
         {% endif %}
     </div>
 
+    <div class="mb-3">
+        <label for="liveSearchInput" class="form-label">Live Search</label>
+        <input
+            type="text"
+            id="liveSearchInput"
+            class="form-control"
+            placeholder="Cari nama, kategori, harga beli, atau stok..."
+        >
+    </div>
+
     {% if barangs %}
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
@@ -32,7 +42,7 @@
                     </tr>
                 </thead>
 
-                <tbody>
+                <tbody id="barangTableBody">
                     {% for barang in barangs %}
                         <tr>
                             <td>{{ barang.nama }}</td>
@@ -85,4 +95,85 @@
         </div>
     {% endif %}
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('liveSearchInput');
+    const tableBody = document.getElementById('barangTableBody');
+    const isOwner = "{{ user.is_owner|yesno:'true,false' }}" === "true";
+
+    function renderActions(barang) {
+        let html = `
+            <a href="/barang/${barang.id}/" class="btn btn-sm btn-outline-success">
+                Detail
+            </a>
+        `;
+
+        if (isOwner) {
+            html += `
+                <a href="/barang/${barang.id}/edit/" class="btn btn-sm btn-warning">
+                    Edit
+                </a>
+
+                <a href="/barang/${barang.id}/hapus/" class="btn btn-sm btn-danger">
+                    Hapus
+                </a>
+            `;
+        }
+
+        return html;
+    }
+
+    function renderBarangs(barangs) {
+        if (!tableBody) {
+            return;
+        }
+
+        if (!barangs.length) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">
+                        Tidak ada barang yang sesuai dengan pencarian.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tableBody.innerHTML = barangs.map(barang => `
+            <tr>
+                <td>${barang.nama}</td>
+                <td>${barang.kategori_display}</td>
+                <td>Rp${barang.harga_beli}</td>
+                <td>${barang.stok}</td>
+                <td class="text-center">
+                    <div class="d-flex justify-content-center gap-1 flex-wrap">
+                        ${renderActions(barang)}
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    let debounceTimer;
+
+    searchInput.addEventListener('input', function () {
+        clearTimeout(debounceTimer);
+
+        debounceTimer = setTimeout(function () {
+            const keyword = searchInput.value;
+
+            fetch(`/api/barang/search/?q=${encodeURIComponent(keyword)}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Live Search Barang JSON:', data);
+                    renderBarangs(data.barangs);
+                })
+                .catch(error => {
+                    console.error('Gagal melakukan live search barang:', error);
+                });
+        }, 400);
+    });
+});
+</script>
 {% endblock %}
