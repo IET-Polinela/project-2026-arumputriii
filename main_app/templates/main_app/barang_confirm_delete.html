@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Hapus Barang{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="page-card">
+            <div class="alert alert-danger">
+                <h1 class="h4 mb-1">Konfirmasi Hapus Barang</h1>
+                <p class="mb-0">
+                    Data yang sudah dihapus tidak dapat dikembalikan.
+                </p>
+            </div>
+
+            <p>Yakin ingin menghapus barang berikut?</p>
+
+            <div class="border rounded p-3 mb-3">
+                <h2 class="h5">{{ object.nama }}</h2>
+                <p class="mb-1">
+                    <strong>Kategori:</strong>
+                    {{ object.get_kategori_display }}
+                </p>
+                <p class="mb-1">
+                    <strong>Harga Beli:</strong>
+                    Rp{{ object.harga_beli }}
+                </p>
+                <p class="mb-0">
+                    <strong>Stok:</strong>
+                    {{ object.stok }}
+                </p>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="btn btn-danger"
+                    onclick="return confirm('Yakin ingin menghapus barang ini?')"
+                >
+                    Hapus
+                </button>
+
+                <a href="{% url 'barang_list' %}" class="btn btn-secondary">
+                    Batal
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

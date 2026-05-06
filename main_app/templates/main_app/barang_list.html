@@ -13,7 +13,7 @@
         </div>
 
         {% if user.is_authenticated and user.is_owner %}
-            <a href="#" class="btn btn-success">
+            <a href="{% url 'barang_create' %}" class="btn btn-success">
                 Tambah Barang
             </a>
         {% endif %}
@@ -28,6 +28,7 @@
                         <th>Kategori</th>
                         <th>Harga Beli</th>
                         <th>Stok</th>
+                        <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
 
@@ -38,6 +39,32 @@
                             <td>{{ barang.get_kategori_display }}</td>
                             <td>Rp{{ barang.harga_beli }}</td>
                             <td>{{ barang.stok }}</td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-1 flex-wrap">
+                                    <a
+                                        href="{% url 'barang_detail' barang.pk %}"
+                                        class="btn btn-sm btn-outline-success"
+                                    >
+                                        Detail
+                                    </a>
+
+                                    {% if user.is_authenticated and user.is_owner %}
+                                        <a
+                                            href="{% url 'barang_update' barang.pk %}"
+                                            class="btn btn-sm btn-warning"
+                                        >
+                                            Edit
+                                        </a>
+
+                                        <a
+                                            href="{% url 'barang_delete' barang.pk %}"
+                                            class="btn btn-sm btn-danger"
+                                        >
+                                            Hapus
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -46,9 +73,15 @@
     {% else %}
         <div class="empty-state">
             <h2 class="h5">Belum ada data barang.</h2>
-            <p class="text-muted mb-0">
+            <p class="text-muted mb-3">
                 Data barang akan ditampilkan di sini.
             </p>
+
+            {% if user.is_authenticated and user.is_owner %}
+                <a href="{% url 'barang_create' %}" class="btn btn-success">
+                    Tambah Barang
+                </a>
+            {% endif %}
         </div>
     {% endif %}
 </div>

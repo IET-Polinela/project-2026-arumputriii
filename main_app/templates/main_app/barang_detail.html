@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Detail Barang{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <h1 class="h3 mb-1">{{ barang.nama }}</h1>
+    <p class="text-muted">{{ barang.get_kategori_display }}</p>
+
+    <hr>
+
+    <p>
+        <strong>Nama:</strong>
+        {{ barang.nama }}
+    </p>
+
+    <p>
+        <strong>Kategori:</strong>
+        {{ barang.get_kategori_display }}
+    </p>
+
+    <p>
+        <strong>Harga Beli:</strong>
+        Rp{{ barang.harga_beli }}
+    </p>
+
+    <p>
+        <strong>Stok:</strong>
+        {{ barang.stok }}
+    </p>
+
+    <hr>
+
+    <div class="d-flex gap-2 flex-wrap">
+        <a href="{% url 'barang_list' %}" class="btn btn-secondary">
+            Kembali
+        </a>
+
+        {% if user.is_authenticated and user.is_owner %}
+            <a href="{% url 'barang_update' barang.pk %}" class="btn btn-warning">
+                Edit
+            </a>
+
+            <a href="{% url 'barang_delete' barang.pk %}" class="btn btn-danger">
+                Hapus
+            </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
