@@ -51,6 +51,14 @@
                             <td>{{ barang.stok }}</td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-1 flex-wrap">
+                                    <button
+                                        type="button"
+                                        class="btn btn-sm btn-primary info-modal-btn"
+                                        data-id="{{ barang.pk }}"
+                                    >
+                                        Info Modal
+                                    </button>
+
                                     <a
                                         href="{% url 'barang_detail' barang.pk %}"
                                         class="btn btn-sm btn-outline-success"
@@ -96,14 +104,72 @@
     {% endif %}
 </div>
 
+<div class="modal fade" id="barangInfoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="modalNamaBarang" class="modal-title">Info Barang</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <p>
+                    <strong>Nama:</strong>
+                    <span id="modalNama"></span>
+                </p>
+
+                <p>
+                    <strong>Kategori:</strong>
+                    <span id="modalKategori"></span>
+                </p>
+
+                <p>
+                    <strong>Harga Beli:</strong>
+                    <span id="modalHargaBeli"></span>
+                </p>
+
+                <p>
+                    <strong>Stok:</strong>
+                    <span id="modalStok"></span>
+                </p>
+
+                <hr>
+
+                <div class="alert alert-success">
+                    <h2 class="h5 mb-1">Harga Jual</h2>
+                    <p class="mb-0">
+                        <strong id="modalHargaJual"></strong>
+                    </p>
+                    <small class="text-muted">
+                        Rumus: Harga Jual = Harga Beli + 39
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('liveSearchInput');
     const tableBody = document.getElementById('barangTableBody');
     const isOwner = "{{ user.is_owner|yesno:'true,false' }}" === "true";
+    const tambahanNpm = 39;
+
+    function formatRupiah(value) {
+        return 'Rp' + Number(value).toLocaleString('id-ID');
+    }
 
     function renderActions(barang) {
         let html = `
+            <button
+                type="button"
+                class="btn btn-sm btn-primary info-modal-btn"
+                data-id="${barang.id}"
+            >
+                Info Modal
+            </button>
+
             <a href="/barang/${barang.id}/" class="btn btn-sm btn-outline-success">
                 Detail
             </a>
@@ -144,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <tr>
                 <td>${barang.nama}</td>
                 <td>${barang.kategori_display}</td>
-                <td>Rp${barang.harga_beli}</td>
+                <td>${formatRupiah(barang.harga_beli)}</td>
                 <td>${barang.stok}</td>
                 <td class="text-center">
                     <div class="d-flex justify-content-center gap-1 flex-wrap">
@@ -173,6 +239,39 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.error('Gagal melakukan live search barang:', error);
                 });
         }, 400);
+    });
+
+    tableBody.addEventListener('click', function (event) {
+        const button = event.target.closest('.info-modal-btn');
+
+        if (!button) {
+            return;
+        }
+
+        const barangId = button.dataset.id;
+
+        fetch(`/api/barang/${barangId}/`)
+            .then(response => response.json())
+            .then(barang => {
+                console.log('Detail Barang JSON:', barang);
+
+                const hargaBeli = Number(barang.harga_beli);
+                const hargaJual = hargaBeli + tambahanNpm;
+
+                document.getElementById('modalNamaBarang').textContent = barang.nama;
+                document.getElementById('modalNama').textContent = barang.nama;
+                document.getElementById('modalKategori').textContent = barang.kategori_display;
+                document.getElementById('modalHargaBeli').textContent = formatRupiah(hargaBeli);
+                document.getElementById('modalStok').textContent = barang.stok;
+                document.getElementById('modalHargaJual').textContent = formatRupiah(hargaJual);
+
+                const modalElement = document.getElementById('barangInfoModal');
+                const modal = new bootstrap.Modal(modalElement);
+                modal.show();
+            })
+            .catch(error => {
+                console.error('Gagal mengambil detail barang:', error);
+            });
     });
 });
 </script>

@@ -1,6 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect
+from django.db.models import Q
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -12,8 +14,6 @@ from django.views.generic import (
 
 from .forms import BarangForm
 from .models import Barang
-from django.db.models import Q
-from django.http import JsonResponse
 
 
 class OwnerRequiredMixin(LoginRequiredMixin):
@@ -75,7 +75,8 @@ class BarangDeleteView(OwnerRequiredMixin, DeleteView):
     def form_valid(self, form):
         messages.success(self.request, 'Barang berhasil dihapus.')
         return super().form_valid(form)
-    
+
+
 class BarangSearchJsonView(LoginRequiredMixin, ListView):
     model = Barang
 
@@ -105,3 +106,21 @@ class BarangSearchJsonView(LoginRequiredMixin, ListView):
         ]
 
         return JsonResponse({'barangs': data})
+
+
+class BarangDetailJsonView(LoginRequiredMixin, DetailView):
+    model = Barang
+
+    def get(self, request, pk, *args, **kwargs):
+        barang = get_object_or_404(Barang, pk=pk)
+
+        data = {
+            'id': barang.id,
+            'nama': barang.nama,
+            'kategori': barang.kategori,
+            'kategori_display': barang.get_kategori_display(),
+            'harga_beli': barang.harga_beli,
+            'stok': barang.stok,
+        }
+
+        return JsonResponse(data)
