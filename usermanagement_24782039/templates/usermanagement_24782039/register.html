@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Register Staff{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="page-card">
+            <h1 class="h3 text-center mb-3">Register Staff</h1>
+            <p class="text-muted text-center">Akun baru otomatis memiliki role Staff.</p>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    {{ form.username }}
+                    <div class="text-danger small">
+                        {{ form.username.errors }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    {{ form.email }}
+                    <div class="text-danger small">
+                        {{ form.email.errors }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    {{ form.password1 }}
+                    <div class="text-danger small">
+                        {{ form.password1.errors }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Konfirmasi Password</label>
+                    {{ form.password2 }}
+                    <div class="text-danger small">
+                        {{ form.password2.errors }}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100">
+                    Register
+                </button>
+            </form>
+
+            <p class="text-center mt-3 mb-0">
+                Sudah punya akun?
+                <a href="{% url 'login' %}">Login</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
