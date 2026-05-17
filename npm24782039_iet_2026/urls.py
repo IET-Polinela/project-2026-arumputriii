@@ -8,4 +8,7 @@ urlpatterns = [
     path('contacts/', include('contacts.urls')),
     path('accounts/', include('usermanagement_24782039.urls')),
     path('dashboard/', include('dashboard_24782039.urls')),
+    
+    path('api/', include('main_app.api_urls')),
+
 ]

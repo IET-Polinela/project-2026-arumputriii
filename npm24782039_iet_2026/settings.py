@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'contacts',
     'usermanagement_24782039',
     'dashboard_24782039',
+
+    'rest_framework',
 ]
 
 AUTH_USER_MODEL = 'usermanagement_24782039.CustomUser'
