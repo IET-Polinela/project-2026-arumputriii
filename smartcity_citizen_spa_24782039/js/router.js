@@ -29,48 +29,17 @@ const routes = {
                 </div>
             </div>
         </div>
-    `,
-
-    '#dashboard': `
-        <h3 class="mb-4">
-            <i class="bi bi-speedometer2"></i>
-            Dashboard Citizen
-        </h3>
-
-        <div class="row g-3">
-            <div class="col-12 col-lg-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5><i class="bi bi-person"></i> Profil</h5>
-                        <p class="text-muted">Informasi warga.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-lg-6">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5><i class="bi bi-megaphone"></i> Laporan Terbaru</h5>
-                        <p class="text-muted">Daftar laporan akan ditampilkan di sini.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-lg-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5><i class="bi bi-bell"></i> Notifikasi</h5>
-                        <p class="text-muted">Belum ada notifikasi.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
     `
 };
 
 function handleRouting() {
     const hash = window.location.hash || '#login';
     const appContent = document.getElementById('app-content');
+
+    if (hash === '#dashboard') {
+        renderDashboardLayout();
+        return;
+    }
 
     appContent.innerHTML = routes[hash] || routes['#login'];
 
