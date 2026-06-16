@@ -32,7 +32,7 @@ class ReportViewSet(viewsets.ModelViewSet):
 
         elif tab == 'feed':
             return queryset.filter(
-                ~Q(reporter=user) & ~Q(status='DRAFT')
+                status__in=['REPORTED', 'VERIFIED', 'IN_PROGRESS', 'RESOLVED']
             )
 
         return queryset.filter(
