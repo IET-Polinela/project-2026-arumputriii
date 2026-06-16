@@ -16,7 +16,7 @@ async function requestAPI(endpoint, method = 'GET', bodyData = null) {
         config.body = JSON.stringify(bodyData);
     }
 
-    const response = await fetch(`http://127.0.0.1:8000${endpoint}`, config);
+    const response = await fetch(`http://103.151.63.85:8007${endpoint}`, config);
 
     return response;
 }

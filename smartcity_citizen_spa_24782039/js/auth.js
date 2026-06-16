@@ -21,6 +21,8 @@ function setupLoginForm() {
             localStorage.setItem('refresh_token', data.refresh);
             localStorage.setItem("username", username);
 
+            updateNavbar();
+
             alert('Login berhasil');
             window.location.hash = '#dashboard';
         } else {
