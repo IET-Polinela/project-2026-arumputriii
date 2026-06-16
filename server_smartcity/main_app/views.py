@@ -17,11 +17,20 @@ from .forms import ReportForm
 from .models import Report
 
 
+PUBLIC_REPORT_STATUSES = [
+    'REPORTED',
+    'VERIFIED',
+    'IN_PROGRESS',
+    'RESOLVED',
+]
+
+
 class AdminRequiredMixin:
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated or not request.user.is_admin:
             messages.error(request, 'Akses Ditolak: Anda bukan admin.')
             return redirect('report_list')
+
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -34,6 +43,11 @@ class ReportListView(ListView):
     template_name = 'main_app/report_list.html'
     context_object_name = 'reports'
     ordering = ['-created_at']
+
+    def get_queryset(self):
+        return Report.objects.filter(
+            status__in=PUBLIC_REPORT_STATUSES
+        ).order_by('-created_at')
 
 
 class ReportDetailView(DetailView):
@@ -88,7 +102,10 @@ class ReportUpdateStatusView(AdminRequiredMixin, View):
             report.status = 'RESOLVED'
             messages.success(request, 'Status laporan berhasil diubah ke RESOLVED.')
         else:
-            messages.warning(request, 'Status laporan sudah final dan tidak dapat diubah lagi.')
+            messages.warning(
+                request,
+                'Status laporan sudah final dan tidak dapat diubah lagi.'
+            )
             return redirect('report_list')
 
         report.save()
@@ -98,7 +115,9 @@ class ReportUpdateStatusView(AdminRequiredMixin, View):
 def live_search_reports(request):
     keyword = request.GET.get('q', '')
 
-    reports = Report.objects.all().order_by('-created_at')
+    reports = Report.objects.filter(
+        status__in=PUBLIC_REPORT_STATUSES
+    ).order_by('-created_at')
 
     if keyword:
         reports = reports.filter(
